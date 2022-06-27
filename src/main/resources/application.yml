@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: databaseevent
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: H2
+    show_sql: true
+    generate-ddl: true
+    hibernate: #this property is not being read
+      format_sql: true # To beautify or pretty print the SQL
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console # URL to access this console http://localhost:9006/databaseevent/h2-console. Change the JDBC URL to whats above and login with sa/password
+      settings:
+        trace: false
+        web-allow-others: false
+server:
+  port: 9006
+  servlet:
+    context-path: /databaseevent
