@@ -20,7 +20,6 @@ public class OrderServiceImpl implements OrderService, EventSubscriber {
     private OrderRepo orderRepo;
     private EventPublisher eventPublisher;
 
-    @Autowired
     public OrderServiceImpl (OrderRepo orderRepo, EventPublisher eventPublisher){
         this.orderRepo = orderRepo;
         this.eventPublisher = eventPublisher;
@@ -53,6 +52,7 @@ public class OrderServiceImpl implements OrderService, EventSubscriber {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderStatus(order.getOrderStatus());
         orderEntity.setOrderType(order.getOrderType());
+//        orderEntity.setOrderNumber();
 
         OrderEntity savedOrderEntity = orderRepo.save(orderEntity);
         order.setOrderId(savedOrderEntity.getOrderId());

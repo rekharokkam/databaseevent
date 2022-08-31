@@ -6,8 +6,9 @@ spring:
     database: H2
     show_sql: true
     generate-ddl: true
-    hibernate: #this property is not being read
-      format_sql: true # To beautify or pretty print the SQL
+    properties:
+      hibernate:
+        format_sql: true # To beautify or pretty print the SQL
   datasource:
     url: jdbc:h2:mem:mydb
     username: sa
