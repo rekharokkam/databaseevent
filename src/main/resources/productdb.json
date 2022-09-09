@@ -1,0 +1,74 @@
+[
+{
+"prId":"42658",
+"name":"Apple iPhone 8 64GB - Silver",
+"tcin":"52880276",
+"dpci":"255140055",
+"upc":"190198451781",
+"model":"6161B"
+},
+{
+"prId":"42659",
+"name":"Apple iPhone 8 64GB - Space Gray",
+"tcin":"52880272",
+"dpci":"255140054",
+"upc":"190198451736",
+"model":"6160B"
+},
+{
+"prId":"42660",
+"name":"Apple iPhone 8 64GB - Gold",
+"tcin":"52880278",
+"dpci":"255140056",
+"upc":"190198451835",
+"model":"6162B"
+},
+{
+"prId":"42664",
+"name":"Apple iPhone 8 256GB - Gold",
+"tcin":"52880273",
+"dpci":"255140059",
+"upc":"190198453334",
+"model":"6165B"
+},
+{
+"prId":"42665",
+"name":"Apple iPhone 8 256GB - Space Gray",
+"tcin":"52880280",
+"dpci":"255140057",
+"upc":"190198453235",
+"model":"6163B"
+},
+{
+"prId":"42666",
+"name":"Apple iPhone 8 256GB - Silver",
+"tcin":"52880269",
+"dpci":"255140058",
+"upc":"190198453280",
+"model":"6164B"
+},
+{
+"prId":"42670",
+"name":"Apple iPhone 8 Plus 256GB - Space Gray",
+"tcin":"52880288",
+"dpci":"255140157",
+"upc":"190198453808",
+"model":"6169B"
+},
+{
+"prId":"42671",
+"name":"Apple iPhone 8 Plus 256GB - Silver",
+"tcin":"52880292",
+"dpci":"255140158",
+"upc":"190198453853",
+"model":"6170B"
+},
+{
+"prId":"42672",
+"name":"Apple iPhone 8 Plus 64GB - Space Gray",
+"tcin":"52880309",
+"dpci":"255140154",
+"upc":"190198453655",
+"model":"6166B"
+}
+]

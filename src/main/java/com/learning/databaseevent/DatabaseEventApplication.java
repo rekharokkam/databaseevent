@@ -1,6 +1,7 @@
 package com.learning.databaseevent;
 
 import com.learning.databaseevent.api.dataobject.Order;
+import com.learning.databaseevent.catalogreplacer.ProductDataLoadService;
 import com.learning.databaseevent.repository.entity.OrderEntity;
 import com.learning.databaseevent.service.OrderService;
 import org.springframework.boot.CommandLineRunner;
@@ -13,9 +14,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 public class DatabaseEventApplication implements CommandLineRunner {
 
 	private OrderService orderService;
+	private ProductDataLoadService productDataLoadService;
 
-	public DatabaseEventApplication (OrderService orderService){
+	public DatabaseEventApplication (OrderService orderService, ProductDataLoadService productDataLoadService) {
 		this.orderService = orderService;
+		this.productDataLoadService = productDataLoadService;
 	}
 
 	@Override
@@ -25,6 +28,8 @@ public class DatabaseEventApplication implements CommandLineRunner {
 		order.setOrderStatus("completed");
 
 		orderService.createOrder(order);
+
+		productDataLoadService.loadDatabase();
 	}
 
 	public static void main(String[] args) {

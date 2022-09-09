@@ -1,11 +1,8 @@
 package com.learning.databaseevent.repository.entity;
 
-import com.learning.databaseevent.customannotations.UniqueIdentifier;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
