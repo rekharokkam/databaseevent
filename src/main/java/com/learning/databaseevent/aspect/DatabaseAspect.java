@@ -40,9 +40,8 @@ public class DatabaseAspect implements EventPublisher {
     //only after successfully executing
     @AfterReturning("execution(* com.learning.databaseevent.repository.OrderRepo.save(..))")
     public void printThisNow (JoinPoint joinPoint){
-        log.info("hahahahahahahahahahaha");
         log.info("total number of parameters to this method : {}", joinPoint.getArgs().length);
-        log.info("parmaeter argument type : {}", joinPoint.getArgs()[0].getClass().getName());
+        log.info("parameter argument type : {}", joinPoint.getArgs()[0].getClass().getName());
 
         OrderEntity orderEntity = (OrderEntity) joinPoint.getArgs()[0];
         Event<OrderEntity> orderSavedEvent = new Event<>(orderEntity);

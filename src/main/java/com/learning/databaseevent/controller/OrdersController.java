@@ -1,6 +1,6 @@
-package com.learning.databaseevent.api.controller;
+package com.learning.databaseevent.controller;
 
-import com.learning.databaseevent.api.dataobject.Order;
+import com.learning.databaseevent.dataobject.Order;
 import com.learning.databaseevent.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

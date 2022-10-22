@@ -1,7 +1,8 @@
-package com.learning.databaseevent.catalogreplacer;
+package com.learning.databaseevent.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.learning.databaseevent.dataobject.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

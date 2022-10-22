@@ -1,6 +1,6 @@
 package com.learning.databaseevent.service;
 
-import com.learning.databaseevent.api.dataobject.Order;
+import com.learning.databaseevent.dataobject.Order;
 
 public interface OrderService {
         void updateOrder (Order order);

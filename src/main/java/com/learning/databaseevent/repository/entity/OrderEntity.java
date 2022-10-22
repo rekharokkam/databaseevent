@@ -28,4 +28,8 @@ public class OrderEntity {
 
     @Column(name = "ordertype", nullable = false, length = 255)
     private String orderType;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "prId")
+    private ProductEntity product;
 }

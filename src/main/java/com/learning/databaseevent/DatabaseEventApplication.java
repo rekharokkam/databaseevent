@@ -1,16 +1,17 @@
 package com.learning.databaseevent;
 
-import com.learning.databaseevent.api.dataobject.Order;
-import com.learning.databaseevent.catalogreplacer.ProductDataLoadService;
-import com.learning.databaseevent.repository.entity.OrderEntity;
+import com.learning.databaseevent.dataobject.Order;
+import com.learning.databaseevent.service.ProductDataLoadService;
 import com.learning.databaseevent.service.OrderService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
+@EnableCaching
 public class DatabaseEventApplication implements CommandLineRunner {
 
 	private OrderService orderService;
@@ -23,13 +24,15 @@ public class DatabaseEventApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Order order = new Order();
-		order.setOrderType("purchase");
-		order.setOrderStatus("completed");
-
-		orderService.createOrder(order);
-
+		//load the products table
 		productDataLoadService.loadDatabase();
+
+//		Order order = new Order();
+//		order.setOrderType("purchase");
+//		order.setOrderStatus("completed");
+//		order.setPrId("42671");
+//
+//		orderService.createOrder(order);
 	}
 
 	public static void main(String[] args) {
