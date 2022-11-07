@@ -8,7 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "myorder")
+@Table(name = "myorders")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

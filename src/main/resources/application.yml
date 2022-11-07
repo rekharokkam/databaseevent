@@ -5,10 +5,12 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     database: H2
     show_sql: true
-    generate-ddl: true
+#    generate-ddl: true
     properties:
       hibernate:
         format_sql: true # To beautify or pretty print the SQL
+#        ddl-auto: validate # not to overwrite my schema (if you had schema.sql scripts). Usually hibernate looks at the entities and generates schema based on those entities
+        ddl-auto: create
   datasource:
     url: jdbc:h2:mem:mydb
     username: sa
