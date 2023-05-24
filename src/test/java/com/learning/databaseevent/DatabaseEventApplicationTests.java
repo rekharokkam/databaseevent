@@ -35,7 +35,7 @@ public class DatabaseEventApplicationTests {
     @BeforeEach
     public void init () {
         productEntity = new ProductEntity();
-        productEntity.setPrId(42700L);
+//        productEntity.setPrId(42735L);
         productEntity.setDpci("255140051");
         productEntity.setModel("6161B");
         productEntity.setName("test iphone");
@@ -43,33 +43,33 @@ public class DatabaseEventApplicationTests {
         productEntity.setUpc("190198451781");
         productEntity.setProductId(UUID.randomUUID());
         productEntity.setCreatedDateTime(LocalDateTime.now().plusMinutes(2));
-
-
     }
 
     @Test
     public void testTwoGetProductCallsDatabaseOnlyOnce () {
+        productEntity.setPrId(42785L);
         productRepo.saveAndFlush(productEntity);
 
-        ProductEntity productEntity1 = productService.getProduct(42700L);
+        ProductEntity productEntity1 = productService.getProduct(42785L);
         assertNotNull(productEntity1, "After inserting Product, Product cannot be null");
-        assertThat(productEntity1.getPrId(), is (42700L));
+        assertThat(productEntity1.getPrId(), is (42785L));
 
-        ProductEntity productEntity2 = productService.getProduct(42700L);
+        ProductEntity productEntity2 = productService.getProduct(42785L);
         assertThat (productEntity1, is(not(same(productEntity2))));
-        assertThat(productEntity1.getPrId(), is (42700L));
+        assertThat(productEntity1.getPrId(), is (42785L));
     }
 
     @Test
     public void testAddNewproductAndFetchTheSameIsOnlyOneDatabaseCall () {
+        productEntity.setPrId(42735L);
         productRepo.saveAndFlush(productEntity);
 
-        ProductEntity productEntity1 = productService.getProduct(42700L);
+        ProductEntity productEntity1 = productService.getProduct(42735L);
         assertNotNull(productEntity1, "After inserting Product, Product cannot be null");
-        assertThat(productEntity1.getPrId(), is (42700L));
+        assertThat(productEntity1.getPrId(), is (42735L));
 
-        ProductEntity productEntity2 = productService.getProduct(42700L);
+        ProductEntity productEntity2 = productService.getProduct(42735L);
         assertThat (productEntity1, is(not(same(productEntity2))));
-        assertThat(productEntity1.getPrId(), is (42700L));
+        assertThat(productEntity1.getPrId(), is (42735L));
     }
 }

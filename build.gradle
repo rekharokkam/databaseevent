@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '2.7.4'
-		lombokVersion = '1.18.8'
+		lombokVersion = '1.18.22'
 		hamcrestVersion = '2.2'
 		mockitoVersion = '3.4.6'
 

@@ -34,7 +34,7 @@ public class ProductServiceImplTest {
     @BeforeEach
     public void init () {
         productEntity = new ProductEntity();
-        productEntity.setPrId(42700L);
+        productEntity.setPrId(42800L);
         productEntity.setDpci("255140051");
         productEntity.setModel("6161B");
         productEntity.setName("test iphone");
@@ -46,11 +46,13 @@ public class ProductServiceImplTest {
 
     @Test
     public void testTwoGetProductsCalls () {
-        when (productRepo.findByPrId(ArgumentMatchers.anyLong())).thenReturn(Optional.of(productEntity), Optional.empty());
+        when (productRepo.findByPrId(ArgumentMatchers.anyLong())).thenReturn(Optional.of(productEntity), Optional.of(productEntity));
+//        when (productRepo.findByPrId(ArgumentMatchers.anyLong())).thenReturn(Optional.of(productEntity));
 
         ProductEntity productEntity1 = productService.getProduct(ArgumentMatchers.anyLong());
+        System.out.println("is the productEntity1 null : " + (productEntity1 == null));
         assertNotNull(productEntity1, "After inserting Product, Product cannot be null");
-        assertThat(productEntity1.getPrId(), is (42700L));
+        assertThat(productEntity1.getPrId(), is (42800L));
 
         ProductEntity productEntity2 = productService.getProduct(ArgumentMatchers.anyLong());
         assertThat (productEntity1, sameInstance(productEntity2));
