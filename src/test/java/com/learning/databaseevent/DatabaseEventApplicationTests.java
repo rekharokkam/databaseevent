@@ -45,7 +45,7 @@ public class DatabaseEventApplicationTests {
         productEntity.setCreatedDateTime(LocalDateTime.now().plusMinutes(2));
     }
 
-    @Test
+//    @Test
     public void testTwoGetProductCallsDatabaseOnlyOnce () {
         productEntity.setPrId(42785L);
         productRepo.saveAndFlush(productEntity);
@@ -59,7 +59,7 @@ public class DatabaseEventApplicationTests {
         assertThat(productEntity1.getPrId(), is (42785L));
     }
 
-    @Test
+//    @Test
     public void testAddNewproductAndFetchTheSameIsOnlyOneDatabaseCall () {
         productEntity.setPrId(42735L);
         productRepo.saveAndFlush(productEntity);

@@ -23,6 +23,42 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+
+  cloud:
+    stream:
+      bindings:
+        input:
+#          contentType: application/*+avro
+          destination: customer-topic
+          group: self-group
+
+      kafka:
+        binder:
+          brokers: localhost:9092
+          consumerProperties:
+          producerProperties:
+          autoCreateTopics: false
+#          configuration:
+#            schema.registry.url: http://localhost:8081
+
+        bindings:
+          input:
+            consumer:
+              ackmode: MANUAL
+              useNativeDecoding: true
+              configuration:
+                key:
+                  deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                value:
+                  deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+
+      stream:
+        bindings:
+          input:
+            contentType: application/*+avro
+      schemaRegistryClient:
+        endpoint: http://localhost:8081
+
 server:
   port: 9006
   servlet:

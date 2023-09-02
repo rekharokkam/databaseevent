@@ -1,17 +1,19 @@
 package com.learning.databaseevent;
 
-import com.learning.databaseevent.dataobject.Order;
-import com.learning.databaseevent.service.ProductDataLoadService;
 import com.learning.databaseevent.service.OrderService;
+import com.learning.databaseevent.service.ProductDataLoadService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.stream.schema.client.EnableSchemaRegistryClient;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @EnableCaching
+@EnableSchemaRegistryClient
+
 public class DatabaseEventApplication implements CommandLineRunner {
 
 	private OrderService orderService;
