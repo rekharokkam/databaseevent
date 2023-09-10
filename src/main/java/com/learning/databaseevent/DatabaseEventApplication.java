@@ -27,7 +27,7 @@ public class DatabaseEventApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		//load the products table
-		productDataLoadService.loadDatabase();
+//		productDataLoadService.loadDatabase();
 
 //		Order order = new Order();
 //		order.setOrderType("purchase");
@@ -38,6 +38,7 @@ public class DatabaseEventApplication implements CommandLineRunner {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("spring.devtools.restart.enabled", "false");
 		SpringApplication.run(DatabaseEventApplication.class, args);
 	}
 }

@@ -1,1 +1,42 @@
-I created the topic - kafka-topics --bootstrap-server localhost:9092 --topic customer-topic --partitions 3 --replication-factor 1 --create
+I created the topic -
+    kafka-topics --bootstrap-server localhost:9092 --topic customer-inbound-topic --partitions 3 --replication-factor 1 --create
+
+I ran the docker container to populate the avro messages
+    docker run -it --rm --net=host confluentinc/cp-schema-registry:latest bash
+    kafka-avro-console-producer --bootstrap-server localhost:9092 --topic customer-inbound-topic --property schema.registry.url=http://localhost:8081 --property value.schema.id=1
+
+    {"first_name": "John","last_name": "Doe","age": 29,"height": 167.77, "weight": 100, "automated_email": true}
+    {"first_name": "John2","last_name": "Doe2","age": 45,"height": 180, "weight": 100, "automated_email": false}
+    {"first_name": "John3","last_name": "Doe3","age": 51,"height": 178, "weight": 100, "automated_email": true}
+    {"first_name": "John4","last_name": "Doe4","age": 83,"height": 199, "weight": 100, "automated_email": true}
+    {"first_name": "John5","last_name": "Doe5","age": 83,"height": 199, "weight": 100,  "automated_email": false}
+    {"first_name": "John6","last_name": "Doe6","age": 83,"height": 199, "weight": 100,  "automated_email": true}
+    {"first_name": "John7","last_name": "Doe7","age": 83,"height": 199, "weight": 100,  "automated_email": false}
+    {"first_name": "John8","last_name": "Doe8","age": 83,"height": 199, "weight": 100,  "automated_email": true}
+
+    {"first_name": "John9","last_name": "Doe9","age": 83,"height": 199, "weight": 100,  "automated_email": true}
+    {"first_name": "John10","last_name": "Doe10","age": 83,"height": 199, "weight": 100,  "automated_email": false}
+
+    {"first_name": "John11","last_name": "Doe10","age": 83,"height": 199, "weight": 100, "automated_email": true}
+    {"first_name": "John12","last_name": "Doe12","age": 83,"height": 199, "weight": 67, "automated_email": false}
+    {"first_name": "John13","last_name": "Doe13","age": 93,"height": 199, "weight": 189, "automated_email": true}
+
+I ran docker container to check the consumer lag and offset details
+    docker run --net=host --name=kafka-consumer -it --rm confluentinc/cp-kafka:7.3.0 /bin/bash
+    kafka-consumer-groups --bootstrap-server localhost:9092 --list
+    kafka-consumer-groups --bootstrap-server localhost:9092 --group customer-inbound-group --describe
+
+I created an outbound topic
+    kafka-topics --bootstrap-server localhost:9092 --topic customer-outbound-topic --partitions 3 --replication-factor 1 --create
+
+Retrieving the message through kcat
+    kcat -C -b 127.0.0.1:9092 -t customer-outbound-topic -s value=avro \
+    -p 1 -o 4 -c 1 -f 'Key: %k\nHeaders: %h\nTimeStamp: %T\nPartition: %p\nOffset: %o\nValue: %s\n' \
+    -r http://127.0.0.1:8081
+
+Reading the message through kafka-avro-consumer
+    docker run -it --rm --net=host confluentinc/cp-schema-registry:latest bash
+    From inside this container run -
+    kafka-avro-console-consumer --bootstrap-server localhost:9092 --topic customer-outbound-topic --partition 1 --from-beginning --property schema.registry.url=http://localhost:8081
+
+

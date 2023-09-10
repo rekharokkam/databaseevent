@@ -27,38 +27,43 @@ spring:
   cloud:
     stream:
       bindings:
-        input:
-#          contentType: application/*+avro
-          destination: customer-topic
-          group: self-group
-
+        process-in-0:
+          contentType: application/*+avro
+          destination: customer-inbound-topic
+          group: customer-inbound-group
+          consumer:
+            useNativeDecoding: true
+        process-out-0:
+          contentType: application/*+avro
+          destination: customer-outbound-topic
+          producer:
+            useNativeDecoding: true
       kafka:
         binder:
           brokers: localhost:9092
-          consumerProperties:
-          producerProperties:
           autoCreateTopics: false
-#          configuration:
-#            schema.registry.url: http://localhost:8081
-
         bindings:
-          input:
-            consumer:
-              ackmode: MANUAL
-              useNativeDecoding: true
-              configuration:
-                key:
-                  deserializer: org.apache.kafka.common.serialization.StringDeserializer
-                value:
-                  deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-
-      stream:
-        bindings:
-          input:
-            contentType: application/*+avro
-      schemaRegistryClient:
-        endpoint: http://localhost:8081
-
+          process-in-0:
+              ackMode: MANUAL
+        streams:
+          binder:
+            configuration:
+#              default:
+#                key:
+#                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                value:
+#                  serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+              schema.registry.url: http://localhost:8081
+          bindings:
+            process-in-0:
+              consumer:
+                applicationId: customer-inbound-group
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+            process-out-0:
+              producer:
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 server:
   port: 9006
   servlet:
