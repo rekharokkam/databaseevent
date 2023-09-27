@@ -5,20 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KeyValueMapper;
+import org.apache.kafka.streams.kstream.ValueMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Function;
 
-@Configuration
+//@Configuration
 @Slf4j
 public class InOutProcessor {
 
-    @Bean
+//    @Bean
     public Function <KStream<String, Customer>, KStream<String, Customer>> process () {
               return new SimpleInOutProcessor ();
     }
@@ -27,71 +26,39 @@ public class InOutProcessor {
 
         @Override
         public KStream<String, Customer> apply(KStream<String, Customer> input) {
+            log.info("Inside the apply method of SimpleInOutProcessor");
 
-            return input.flatMap(
-                    (key, value) -> {
-                        System.out.println("Coming here");
-                        List<KeyValue<String, Customer>> result = new LinkedList<>();
-                        Customer outboundCustomer = new Customer();
-                        outboundCustomer.setAge(value.getAge() + 10);
-                        outboundCustomer.setAutomatedEmail(value.getAutomatedEmail());
-                        outboundCustomer.setHeight(value.getHeight() + 2);
-                        outboundCustomer.setWeight(value.getWeight() + 50);
-                        outboundCustomer.setFirstName(value.getFirstName().toUpperCase());
-                        outboundCustomer.setLastName(value.getLastName().toLowerCase());
-
-                        log.info("Before Adding the key to the result : {}", "test-key".toUpperCase());
-                        log.info("Before adding the customer payload : {}", outboundCustomer);
-
-                        result.add(KeyValue.pair("test-key".toUpperCase(), outboundCustomer) );
-                        return result;
-                    }
-            );
-
-
-//            input.foreach((key, value) -> {
-//                log.info("Inbound Key : {}", key);
+//            return input.flatMap(
+//                    (key, value) -> {
+//                        log.info("Inside the generation of outbound Object");
+//                        List<KeyValue<String, Customer>> result = new LinkedList<>();
 //
-//                Customer inboundCustomer = value;
-//                log.info("Inbound Payload : {}", inboundCustomer);
+//                        Customer outboundCustomer = new Customer();
+//                        outboundCustomer.setAge(value.getAge() + 10);
+//                        outboundCustomer.setAutomatedEmail(value.getAutomatedEmail());
+//                        outboundCustomer.setHeight(value.getHeight() + 2);
+//                        outboundCustomer.setWeight(value.getWeight() + 50);
+//                        outboundCustomer.setFirstName(value.getFirstName().toUpperCase());
+//                        outboundCustomer.setLastName(value.getLastName().toLowerCase());
 //
-//                KStream<String, Customer> something =  input.flatMapValues (eachValue -> {
-//                    log.info("Inside the payload processor: {}", eachValue);
-//                    return Arrays.asList(eachValue);
-//                }).map(
-//                     (eachKey, eachValue) -> {
-//                         System.out.println("Coming here");
-//                         return new KeyValue<>(key.toUpperCase(), value);
-//                     } ) ;
+//                        log.info("Before Adding the key to the result : {}", "test-key".toUpperCase());
+//                        log.info("Before adding the customer payload : {}", outboundCustomer);
+//
+//                        result.add(KeyValue.pair("test-key".toUpperCase(), outboundCustomer) );
+//                        return result;
+//                    }
+//            );
 
-//                KStream<String, Customer> outboundCustomer = input.flatMap(
-//                        (eachKey, eachValue) -> {
-//                            System.out.println("Coming here");
-//                            Customer outboundCustomer1 = new Customer();
-//                            outboundCustomer1.setAge(eachValue.getAge() + 10);
-//                            outboundCustomer1.setAutomatedEmail(eachValue.getAutomatedEmail());
-//                            outboundCustomer1.setHeight(eachValue.getHeight() + 2);
-//                            outboundCustomer1.setWeight(eachValue.getWeight() + 50);
-//                            outboundCustomer1.setFirstName(eachValue.getFirstName().toUpperCase());
-//                            outboundCustomer1.setLastName(eachValue.getLastName().toLowerCase());
-//
-//                            log.info("Before Adding the key to the result : {}", eachKey.toUpperCase());
-//                            log.info("Before adding the customer payload : {}", outboundCustomer1);
-//
-//                            List<KeyValue <String, Customer>> result = new LinkedList<>();
-//                            result.add(KeyValue.pair(eachKey.toUpperCase(), outboundCustomer1));
-//
-//                            return result;
-//                        }
-//                );
-//            });
+//            return input.flatMap(new MyKeyValueMapper());
+            
+              return input.flatMapValues(new MyValueMapper());
         }
     }
 
-    class MyKeyValueMapper implements KeyValueMapper<String, Customer, Customer> {
-
+    class MyValueMapper implements ValueMapper <Customer, List<Customer>> {
         @Override
-        public Customer apply(String key, Customer value) {
+        public List<Customer> apply(Customer value) {
+            log.info("Inside the apply method of MyValueMapper");
             Customer outboundCustomer = new Customer();
             outboundCustomer.setAge(value.getAge() + 10);
             outboundCustomer.setAutomatedEmail(value.getAutomatedEmail());
@@ -99,7 +66,30 @@ public class InOutProcessor {
             outboundCustomer.setWeight(value.getWeight() + 50);
             outboundCustomer.setFirstName(value.getFirstName().toUpperCase());
             outboundCustomer.setLastName(value.getLastName().toLowerCase());
-            return new Customer();
+
+            List<Customer> result = new LinkedList<>();
+            result.add(outboundCustomer);
+            log.info("outboundcustomer added : {}", outboundCustomer);
+            return result;
+        }
+    }
+
+    class MyKeyValueMapper implements KeyValueMapper<String, Customer, List<KeyValue<String, Customer>>> {
+
+        @Override
+        public List<KeyValue<String, Customer>> apply(String key, Customer value) {
+
+            Customer outboundCustomer = new Customer();
+            outboundCustomer.setAge(value.getAge() + 10);
+            outboundCustomer.setAutomatedEmail(value.getAutomatedEmail());
+            outboundCustomer.setHeight(value.getHeight() + 2);
+            outboundCustomer.setWeight(value.getWeight() + 50);
+            outboundCustomer.setFirstName(value.getFirstName().toUpperCase());
+            outboundCustomer.setLastName(value.getLastName().toLowerCase());
+
+            List<KeyValue<String, Customer>> result = new LinkedList<>();
+            result.add(KeyValue.pair("test-key".toUpperCase(), outboundCustomer) );
+            return result;
         }
     }
 }

@@ -23,7 +23,6 @@ spring:
       settings:
         trace: false
         web-allow-others: false
-
   cloud:
     stream:
       bindings:
@@ -33,15 +32,40 @@ spring:
           group: customer-inbound-group
           consumer:
             useNativeDecoding: true
+        inbound-in-0:
+          contentType: application/*+avro
+          destination: customer-inbound-topic
+          group: customer-inbound-only-group
+          consumer:
+            useNativeDecoding: true
         process-out-0:
           contentType: application/*+avro
           destination: customer-outbound-topic
           producer:
             useNativeDecoding: true
+        output:
+          contentType: application/*+avro
+          destination: customer-outbound-topic
+          binder: kafka
+          producer:
+            useNativeEncoding: true
+            configuration:
+              value.serializer: org.springframework.cloud.stream.schema.avro.AvroSchemaRegistryClientMessageConverter
+              schema.registry.url: http://localhost:8081
+
+        bindings:
+          output:
+            producer:
+              configuration:
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                schema.registry.url: http://localhost:8081
+
       kafka:
         binder:
           brokers: localhost:9092
           autoCreateTopics: false
+#          producerProperties:
+#            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
         bindings:
           process-in-0:
               ackMode: MANUAL
@@ -55,6 +79,11 @@ spring:
 #                  serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
               schema.registry.url: http://localhost:8081
           bindings:
+            inbound-in-0:
+              consumer:
+                applicationId: customer-inbound-only-group
+                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             process-in-0:
               consumer:
                 applicationId: customer-inbound-group
@@ -62,8 +91,14 @@ spring:
                 valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             process-out-0:
               producer:
+                contentType: application/*+avro
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+#            output:
+#              producer:
+#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+
 server:
   port: 9006
   servlet:

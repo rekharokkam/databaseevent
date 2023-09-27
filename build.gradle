@@ -1,24 +1,26 @@
 buildscript {
-	ext {
-		springBootVersion = '3.1.3'
-		lombokVersion = '1.18.22'
-		hamcrestVersion = '2.2'
-		mockitoVersion = '5.2.0'
-		avro_version = '1.11.2'
-		avro_plugin_version = '1.8.0'
-		confluent_version = '5.3.0'
-		spring_cloud_stream_kafka = '4.0.4'
-	}
-	repositories {
-		mavenCentral()
-	}
+    ext {
+        springBootVersion = '3.1.3'
+        lombokVersion = '1.18.22'
+        hamcrestVersion = '2.2'
+        mockitoVersion = '5.2.0'
+        avro_version = '1.11.2'
+        avro_plugin_version = '1.8.0'
+        confluent_version = '5.3.0'
+        spring_cloud_stream_kafka = '4.0.4'
+
+        set('springCloudVersion', "2021.0.3")
+    }
+    repositories {
+        mavenCentral()
+    }
 }
 
 plugins {
-	id 'org.springframework.boot' version "$springBootVersion"
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id 'com.github.davidmc24.gradle.plugin.avro' version "${avro_plugin_version}"
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'com.github.davidmc24.gradle.plugin.avro' version "${avro_plugin_version}"
 }
 
 group = 'com.learning'
@@ -26,52 +28,69 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
-	maven { url "https://packages.confluent.io/maven/" }
+    mavenCentral()
+    maven { url "https://packages.confluent.io/maven/" }
 }
 
 dependencies {
-	implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
-	implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-	implementation "org.springframework.boot:spring-boot-starter-cache:$springBootVersion"
-	implementation "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
-	implementation 'com.hazelcast:hazelcast:5.2.2'
-	implementation "com.hazelcast:hazelcast-spring"
-	implementation 'org.modelmapper:modelmapper:3.1.1'
-	implementation "org.apache.avro:avro:${avro_version}"
-	implementation "io.confluent:kafka-avro-serializer:${confluent_version}"
-	implementation "org.springframework.cloud:spring-cloud-function-context"
-	implementation "org.springframework.cloud:spring-cloud-stream-schema:2.2.1.RELEASE"
-	implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka:${spring_cloud_stream_kafka}"
-	implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-core:${spring_cloud_stream_kafka}"
-	implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:${spring_cloud_stream_kafka}"
-	implementation 'javax.validation:validation-api:2.0.1.Final'
-	implementation 'io.confluent:kafka-serde-tools-package:7.3.2'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-cache:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
 
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    implementation "org.springframework.cloud:spring-cloud-function-context"
+    implementation "org.springframework.cloud:spring-cloud-stream-schema:2.2.1.RELEASE"
+    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka:${spring_cloud_stream_kafka}"
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-core:${spring_cloud_stream_kafka}"
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:${spring_cloud_stream_kafka}"
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka:${spring_cloud_stream_kafka}"
+    implementation "org.springframework.cloud:spring-cloud-stream-binders:${spring_cloud_stream_kafka}"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation("org.junit.jupiter:junit-jupiter") {
-		because 'allows to write and run Jupiter tests'
-	}
-	testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
-	testImplementation "org.hamcrest:hamcrest:$hamcrestVersion"
 
-	testImplementation "org.mockito:mockito-core:$mockitoVersion"
-	testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+    implementation 'io.confluent:kafka-serde-tools-package:7.3.2'
+    implementation "org.apache.avro:avro:${avro_version}"
+//    implementation "io.confluent:kafka-avro-serializer:${confluent_version}"
+
+    implementation 'com.hazelcast:hazelcast:5.2.2'
+    implementation "com.hazelcast:hazelcast-spring"
+
+    implementation 'org.modelmapper:modelmapper:3.1.1'
+
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.junit.jupiter:junit-jupiter") {
+        because 'allows to write and run Jupiter tests'
+    }
+    testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    testImplementation "org.hamcrest:hamcrest:$hamcrestVersion"
+
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
+
+    implementation 'org.springframework.cloud:spring-cloud-stream-test-binder:4.0.4'
 }
+
+//dependencyManagement {
+//    imports {
+//        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+//    }
+//}
+
 
 sourceSets.main.java.srcDir "${project.projectDir}/build/generated-main-avro-java"
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

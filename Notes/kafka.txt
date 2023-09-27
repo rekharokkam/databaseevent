@@ -31,7 +31,7 @@ I created an outbound topic
 
 Retrieving the message through kcat
     kcat -C -b 127.0.0.1:9092 -t customer-outbound-topic -s value=avro \
-    -p 1 -o 4 -c 1 -f 'Key: %k\nHeaders: %h\nTimeStamp: %T\nPartition: %p\nOffset: %o\nValue: %s\n' \
+    -p 1 -o 10 -c 1 -f 'Key: %k\nHeaders: %h\nTimeStamp: %T\nPartition: %p\nOffset: %o\nValue: %s\n' \
     -r http://127.0.0.1:8081
 
 Reading the message through kafka-avro-consumer
