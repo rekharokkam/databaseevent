@@ -99,7 +99,18 @@ spring:
 #                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
 #                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 
+application:
+  name: databaseevent
+
 server:
   port: 9006
   servlet:
     context-path: /databaseevent
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      base-path: /

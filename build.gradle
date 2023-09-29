@@ -9,7 +9,7 @@ buildscript {
         confluent_version = '5.3.0'
         spring_cloud_stream_kafka = '4.0.4'
 
-        set('springCloudVersion', "2021.0.3")
+        set('springCloudVersion', "2022.0.4")
     }
     repositories {
         mavenCentral()
@@ -39,23 +39,23 @@ repositories {
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
-    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    implementation "org.springframework.boot:spring-boot-starter-cache:$springBootVersion"
-    implementation "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
+    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation ("org.springframework.boot:spring-boot-starter-web")
+    implementation ("org.springframework.boot:spring-boot-starter-cache")
+    implementation ("org.springframework.boot:spring-boot-starter-validation")
+    implementation ("org.springframework.boot:spring-boot-starter-actuator")
 
-    implementation "org.springframework.cloud:spring-cloud-function-context"
+    implementation ("org.springframework.cloud:spring-cloud-function-context")
+    implementation ("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation ("org.springframework.cloud:spring-cloud-stream-binder-kafka-core")
+    implementation ("org.springframework.cloud:spring-cloud-stream-binder-kafka-streams")
+    implementation ("org.springframework.cloud:spring-cloud-stream-binder-kafka")
+//    implementation ("org.springframework.cloud:spring-cloud-stream-binders")
+
     implementation "org.springframework.cloud:spring-cloud-stream-schema:2.2.1.RELEASE"
-    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka:${spring_cloud_stream_kafka}"
-    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-core:${spring_cloud_stream_kafka}"
-    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:${spring_cloud_stream_kafka}"
-    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka:${spring_cloud_stream_kafka}"
-    implementation "org.springframework.cloud:spring-cloud-stream-binders:${spring_cloud_stream_kafka}"
-
 
     implementation 'io.confluent:kafka-serde-tools-package:7.3.2'
     implementation "org.apache.avro:avro:${avro_version}"
-//    implementation "io.confluent:kafka-avro-serializer:${confluent_version}"
 
     implementation 'com.hazelcast:hazelcast:5.2.2'
     implementation "com.hazelcast:hazelcast-spring"
@@ -82,11 +82,11 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-stream-test-binder:4.0.4'
 }
 
-//dependencyManagement {
-//    imports {
-//        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-//    }
-//}
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
 
 
 sourceSets.main.java.srcDir "${project.projectDir}/build/generated-main-avro-java"

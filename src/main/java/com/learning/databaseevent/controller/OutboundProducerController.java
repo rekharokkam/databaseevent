@@ -4,7 +4,7 @@ import com.learning.databaseevent.dataobject.Order;
 import com.learning.spring.kafka.avro.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
+//import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +26,8 @@ import java.util.function.Supplier;
 @RequestMapping(path = "/customers")
 public class OutboundProducerController {
 
-    @Autowired
-    private StreamBridge streamBridge;
+//    @Autowired
+//    private StreamBridge streamBridge;
 
 //    public OutboundProducerController (StreamBridge streamBridge){
 //        this.streamBridge = streamBridge;
@@ -39,15 +39,15 @@ public class OutboundProducerController {
         log.info ("Inside the OutboundProducerController POST method : ");
         Customer outboundCustomer = getOutboundCustomer();
         log.info("customer fetched : {}", outboundCustomer.getClass().getName());
-        log.info("Customer classloader name: {} :: this classloader : {} :: StreamBridge classloader : {}",
-                outboundCustomer.getClass().getClassLoader().getName(),
-                this.getClass().getClassLoader().getName(),
-                streamBridge.getClass().getClassLoader().getName());
+//        log.info("Customer classloader name: {} :: this classloader : {} :: StreamBridge classloader : {}",
+//                outboundCustomer.getClass().getClassLoader().getName(),
+//                this.getClass().getClassLoader().getName(),
+//                streamBridge.getClass().getClassLoader().getName());
 //        StreamBridge streamBridge = context.getBean(StreamBridge.class);
 //        streamBridge.send("output", outboundCustomer);
 
-        streamBridge.send("output", MessageBuilder.withPayload(outboundCustomer)
-                .build(), new MimeType("application", "*+avro"));
+//        streamBridge.send("output", MessageBuilder.withPayload(outboundCustomer)
+//                .build(), new MimeType("application", "*+avro"));
 
         return new ResponseEntity<>("Ok", HttpStatus.CREATED);
     }

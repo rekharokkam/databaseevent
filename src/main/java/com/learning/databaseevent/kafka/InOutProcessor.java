@@ -49,9 +49,9 @@ public class InOutProcessor {
 //                    }
 //            );
 
-//            return input.flatMap(new MyKeyValueMapper());
+            return input.flatMap(new MyKeyValueMapper());
             
-              return input.flatMapValues(new MyValueMapper());
+//              return input.flatMapValues(new MyValueMapper());
         }
     }
 
