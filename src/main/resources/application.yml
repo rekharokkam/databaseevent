@@ -25,6 +25,7 @@ spring:
         web-allow-others: false
   cloud:
     stream:
+      source: publish
       bindings:
         process-in-0:
           contentType: application/*+avro
@@ -46,38 +47,27 @@ spring:
         output:
           contentType: application/*+avro
           destination: customer-outbound-topic
-          binder: kafka
           producer:
             useNativeEncoding: true
-            configuration:
-              value.serializer: org.springframework.cloud.stream.schema.avro.AvroSchemaRegistryClientMessageConverter
-              schema.registry.url: http://localhost:8081
-
-        bindings:
-          output:
-            producer:
-              configuration:
-                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-                schema.registry.url: http://localhost:8081
 
       kafka:
         binder:
           brokers: localhost:9092
           autoCreateTopics: false
-#          producerProperties:
-#            value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+          configuration:
+            schema.registry.url: http://localhost:8081
+
         bindings:
           process-in-0:
               ackMode: MANUAL
+          output:
+            producer:
+              configuration:
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                auto.register.schemas: false
+                acks: all
         streams:
-          binder:
-            configuration:
-#              default:
-#                key:
-#                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#                value:
-#                  serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-              schema.registry.url: http://localhost:8081
           bindings:
             inbound-in-0:
               consumer:
@@ -94,10 +84,6 @@ spring:
                 contentType: application/*+avro
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-#            output:
-#              producer:
-#                keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#                valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 
 application:
   name: databaseevent
