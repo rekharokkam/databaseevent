@@ -25,18 +25,17 @@ spring:
         web-allow-others: false
   cloud:
     stream:
-      source: publish
       bindings:
-        process-in-0:
-          contentType: application/*+avro
-          destination: customer-inbound-topic
-          group: customer-inbound-group
-          consumer:
-            useNativeDecoding: true
         inbound-in-0:
           contentType: application/*+avro
           destination: customer-inbound-topic
           group: customer-inbound-only-group
+          consumer:
+            useNativeDecoding: true
+        process-in-0:
+          contentType: application/*+avro
+          destination: customer-inbound-topic
+          group: customer-inbound-group
           consumer:
             useNativeDecoding: true
         process-out-0:
@@ -44,7 +43,8 @@ spring:
           destination: customer-outbound-topic
           producer:
             useNativeDecoding: true
-        output:
+        outbound-out-0:
+          binder: kafka
           contentType: application/*+avro
           destination: customer-outbound-topic
           producer:
@@ -54,20 +54,25 @@ spring:
         binder:
           brokers: localhost:9092
           autoCreateTopics: false
-          configuration:
-            schema.registry.url: http://localhost:8081
 
         bindings:
-          process-in-0:
-              ackMode: MANUAL
-          output:
+          outbound-out-0:
             producer:
               configuration:
                 key.serializer: org.apache.kafka.common.serialization.StringSerializer
                 value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                schema.registry.url: http://localhost:8081
                 auto.register.schemas: false
-                acks: all
+                use.latest.version: true
+#                use.schema.id: 1
+
         streams:
+          binder:
+            brokers: localhost:9092
+            autoCreateTopics: false
+            configuration:
+              schema.registry.url: http://localhost:8081
+
           bindings:
             inbound-in-0:
               consumer:
@@ -75,6 +80,7 @@ spring:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             process-in-0:
+              ackMode: MANUAL
               consumer:
                 applicationId: customer-inbound-group
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
@@ -85,8 +91,13 @@ spring:
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 
+
 application:
   name: databaseevent
+
+logging:
+  level:
+    org.springframework: DEBUG
 
 server:
   port: 9006

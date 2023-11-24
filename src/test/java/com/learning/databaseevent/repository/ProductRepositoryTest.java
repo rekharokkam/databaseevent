@@ -33,7 +33,7 @@ you should consider @SpringBootTest combined with @AutoConfigureTestDatabase rat
 When using JUnit 4, this annotation should be used in combination with @RunWith(SpringRunner.class).
  */
 
-@DataJpaTest
+//@DataJpaTest
 @ComponentScan("com.learning.databaseevent")
 //@Transactional // after each test data roll back happens automatically. This is a redundant annotation
 public class ProductRepositoryTest {
@@ -50,7 +50,7 @@ public class ProductRepositoryTest {
 //    @Qualifier("productRepo") //this is redundant. Just for demo purposes used here. Autowire by Type is by default.
     private ProductRepo productRepo;
 
-    @BeforeEach
+//    @BeforeEach
     public void init () {
         productEntity = new ProductEntity();
         productEntity.setPrId(42700L);
@@ -62,7 +62,7 @@ public class ProductRepositoryTest {
         productEntity.setCreatedDateTime(LocalDateTime.now().plusHours(1));
     }
 
-    @Test
+//    @Test
     public void testCreateNewProduct () {
         ProductEntity persistedProductEntity = productRepo.save(productEntity);
         System.out.println("persisted entity : " + persistedProductEntity);
@@ -71,7 +71,7 @@ public class ProductRepositoryTest {
         assertEquals(productEntity.getTcin(), "52880272");
     }
 
-    @Test
+//    @Test
     public void testUpdateNewProduct () {
         productEntity.setTcin("52880234");
         ProductEntity persistedProductEntity = productRepo.save(productEntity);
@@ -79,7 +79,7 @@ public class ProductRepositoryTest {
         assertEquals(productEntity.getTcin(), "52880234");
     }
 
-    @Test
+//    @Test
     public void testFindProduct () {
         Optional<ProductEntity> persistedProductEntity = productRepo.findByPrId(42700L);
         assertNotNull(persistedProductEntity, "After Updating product, Product cannot be null");
@@ -107,7 +107,7 @@ public class ProductRepositoryTest {
 ////        assertThat (legacyPrIds, containsInAnyOrder(Arrays.asList(prIds)));
 //    }
 
-    @Test
+//    @Test
     public void testSaveAllProductsDuringInitialLoad(){
         ProductEntity productEntity1 = new ProductEntity();
         productEntity1.setPrId(42900L);

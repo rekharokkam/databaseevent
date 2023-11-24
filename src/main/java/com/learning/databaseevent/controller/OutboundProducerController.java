@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MimeType;
@@ -43,11 +44,17 @@ public class OutboundProducerController {
                 outboundCustomer.getClass().getClassLoader().getName(),
                 this.getClass().getClassLoader().getName(),
                 streamBridge.getClass().getClassLoader().getName());
-//        StreamBridge streamBridge = context.getBean(StreamBridge.class);
-        streamBridge.send("output", outboundCustomer);
+        try {
+//            streamBridge.send("outbound-out-0", outboundCustomer);
+            streamBridge.send("outbound-out-0", MessageBuilder.withPayload(outboundCustomer)
+                            .setHeader("kafka_messageKey", "test_order")
+                    .build(),
+                    new MimeType("application", "*+avro"));
+        } catch (Exception exception) {
+            log.error("there was an exception", exception);
+        }
 
-        streamBridge.send("output", MessageBuilder.withPayload(outboundCustomer)
-                .build(), new MimeType("application", "*+avro"));
+
 
         return new ResponseEntity<>("Ok", HttpStatus.CREATED);
     }
@@ -55,12 +62,12 @@ public class OutboundProducerController {
     public Customer getOutboundCustomer () {
         log.info("Inside the method to generate Customer class");
         Customer outboundCustomer = new Customer();
-        outboundCustomer.setAge(20);
+        outboundCustomer.setAge(100);
         outboundCustomer.setAutomatedEmail(false);
-        outboundCustomer.setHeight(2);
-        outboundCustomer.setWeight(50);
-        outboundCustomer.setFirstName("Jane553".toUpperCase());
-        outboundCustomer.setLastName("Doe553".toLowerCase());
+        outboundCustomer.setHeight(21);
+        outboundCustomer.setWeight(150);
+        outboundCustomer.setFirstName("First_key".toUpperCase());
+        outboundCustomer.setLastName("Doe_key".toLowerCase());
 
         log.info("Customer class returned : {}", outboundCustomer);
         return outboundCustomer;

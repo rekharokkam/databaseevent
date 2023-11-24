@@ -13,11 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-//@Configuration
+@Configuration
 @Slf4j
 public class InOutProcessor {
 
-//    @Bean
+    @Bean
     public Function <KStream<String, Customer>, KStream<String, Customer>> process () {
               return new SimpleInOutProcessor ();
     }

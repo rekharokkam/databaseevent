@@ -1,4 +1,8 @@
 I created the topic -
+
+    Run the container first
+    docker run --net=host --name=kafka-consumer -it --rm confluentinc/cp-kafka:7.3.0 /bin/bash
+
     kafka-topics --bootstrap-server localhost:9092 --topic customer-inbound-topic --partitions 3 --replication-factor 1 --create
 
 I ran the docker container to populate the avro messages
@@ -39,4 +43,15 @@ Reading the message through kafka-avro-consumer
     From inside this container run -
     kafka-avro-console-consumer --bootstrap-server localhost:9092 --topic customer-outbound-topic --partition 1 --from-beginning --property schema.registry.url=http://localhost:8081
 
+NOTE:
+auto.register.schemas: false
+use.latest.version: true
+use.schema.id: 1
 
+only One combination works -
+    auto.register.schemas: false
+    use.latest.version: true
+
+OR
+    use.latest.version: true
+    use.schema.id: 1
