@@ -61,7 +61,10 @@ spring:
               configuration:
                 key.serializer: org.apache.kafka.common.serialization.StringSerializer
                 value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-                schema.registry.url: http://localhost:8081
+                schema:
+                  registry:
+                    url: http://localhost:8081
+                    headers.x-api-key: 12345
                 auto.register.schemas: false
                 use.latest.version: true
 #                use.schema.id: 1

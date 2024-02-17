@@ -1,17 +1,23 @@
 {
   "type": "record",
-  "namespace": "com.learning.spring.kafka.avro",
   "name": "Customer",
+  "namespace": "com.learning.spring.kafka.avro",
   "doc": "Avro Schema for Customer",
   "fields": [
     {
       "name": "first_name",
-      "type": "string",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
       "doc": "First Name of the Customer"
     },
     {
       "name": "last_name",
-      "type": "string",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      },
       "doc": "Last Name of the Customer"
     },
     {
@@ -32,8 +38,8 @@
     {
       "name": "automated_email",
       "type": "boolean",
-      "default": true,
-      "doc": "Indicates if the customer opted for automated marketing emails, by default its true"
+      "doc": "Indicates if the customer opted for automated marketing emails, by default its true",
+      "default": true
     }
   ]
 }

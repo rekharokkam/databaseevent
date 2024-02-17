@@ -1,0 +1,10 @@
+Teachers github - https://github.com/kousen/reactive-spring
+
+Kotlin + Spring Boot
+--------------------
+Everything is pubic by default in kotlin
+teachers github - https://github.com/kousen/spring-kotlin
+When using Arrays in Kotlin u only use Array class while declaring the variable, but for accessing the elements in the array [] are used.
+
+val someArray: Array<SomeObject>
+println (someArray[1])

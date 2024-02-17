@@ -48,6 +48,7 @@ public class OutboundProducerController {
 //            streamBridge.send("outbound-out-0", outboundCustomer);
             streamBridge.send("outbound-out-0", MessageBuilder.withPayload(outboundCustomer)
                             .setHeader("kafka_messageKey", "test_order")
+                            .setHeader("x-api-key", "12345")
                     .build(),
                     new MimeType("application", "*+avro"));
         } catch (Exception exception) {
