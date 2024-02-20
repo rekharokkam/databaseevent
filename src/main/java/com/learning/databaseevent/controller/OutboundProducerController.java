@@ -55,8 +55,6 @@ public class OutboundProducerController {
             log.error("there was an exception", exception);
         }
 
-
-
         return new ResponseEntity<>("Ok", HttpStatus.CREATED);
     }
 
