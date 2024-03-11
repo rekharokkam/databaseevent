@@ -11,7 +11,7 @@ I created the topic -
     After a while I dropped the topic - customer-inbound-topic and recreated it
     kafka-topics --bootstrap-server localhost:9092 --topic first-topic --delete
 
-    kafka-topics --bootstrap-server localhost:9092 --topic customer-inbound-topic --partitions 3 --replication-factor 1 --create
+    kafka-topics --bootstrap-server localhost:9092 --topic order-inbound-topic --partitions 3 --replication-factor 1 --create
 
 I ran the docker container to populate the avro messages
     docker run -it --rm --net=host confluentinc/cp-schema-registry:latest bash

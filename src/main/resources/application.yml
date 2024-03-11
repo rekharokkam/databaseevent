@@ -74,7 +74,10 @@ spring:
             brokers: localhost:9092
             autoCreateTopics: false
             configuration:
-              schema.registry.url: http://localhost:8081
+              schema:
+                registry:
+                  url: http://localhost:8081
+                  headers.x-api-key: 12345
 
           bindings:
             inbound-in-0:
