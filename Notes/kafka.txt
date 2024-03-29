@@ -3,15 +3,23 @@ Navigate to - /Users/Z00465G/Documents/Rekha/personal_workspace/kafka-standalone
     docker-compose up
 access the landoop suite through the URL http://localhost:3030
 
+If using wurstmeister compose file, then docker-compose -f docker-compose-single-broker.yml up
+
 I created the topic -
 
     Run the container first
     docker run --net=host --name=kafka-consumer -it --rm confluentinc/cp-kafka:7.3.0 /bin/bash
 
+    PS - if using a custom network, then change --net=host to --net=<custom_network>
+    Ex - docker run --net=mynetwork-2718281828 --name=kafka-consumer -it --rm confluentinc/cp-kafka:7.3.0 /bin/bash
+
     After a while I dropped the topic - customer-inbound-topic and recreated it
     kafka-topics --bootstrap-server localhost:9092 --topic first-topic --delete
 
     kafka-topics --bootstrap-server localhost:9092 --topic order-inbound-topic --partitions 3 --replication-factor 1 --create
+
+    PS - if using a custom network, then change the bootstrap-server localhost:9092 to <IP_Address_of_kafka_container>>:9092
+    Ex - kafka-topics --bootstrap-server 172.20.42.6:9092 --topic order-inbound-topic --partitions 3 --replication-factor 1 --create
 
 I ran the docker container to populate the avro messages
     docker run -it --rm --net=host confluentinc/cp-schema-registry:latest bash
