@@ -19,7 +19,7 @@ I created the topic -
     kafka-topics --bootstrap-server localhost:9092 --topic order-inbound-topic --partitions 3 --replication-factor 1 --create
 
     PS - if using a custom network, then change the bootstrap-server localhost:9092 to <IP_Address_of_kafka_container>>:9092
-    Ex - kafka-topics --bootstrap-server 172.20.42.6:9092 --topic order-inbound-topic --partitions 3 --replication-factor 1 --create
+    Ex - kafka-topics --bootstrap-server 172.18.0.3:9092 --topic order-inbound-topic --partitions 3 --replication-factor 1 --create
 
 I ran the docker container to populate the avro messages
     docker run -it --rm --net=host confluentinc/cp-schema-registry:latest bash
