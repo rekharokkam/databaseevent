@@ -1,0 +1,36 @@
+
+Docker Image Reference for Confluent Platform
+---------------------------------------------
+https://docs.confluent.io/platform/current/installation/docker/image-reference.html#:~:text=Kafka%20images,of%20the%20cp%2Dserver%20package.
+
+Docker Image Configuration Reference for Confluent Platform
+-----------------------------------------------------------
+https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-enterprise-ak-configuration
+
+kraft overview
+--------------
+https://docs.confluent.io/platform/current/kafka-metadata/kraft.html#kraft-overview
+
+
+cli tools reference
+-------------------
+https://docs.confluent.io/platform/current/tools/cli-reference.html
+
+
+confluent kafka topic
+---------------------
+https://docs.confluent.io/confluent-cli/current/command-reference/kafka/topic/index.html
+
+Running cp-local image
+----------------------
+/Users/Z00465G/Documents/Rekha/software/kafka-3.7.0-src/bin
+
+
+To install kafka and all its CLI tools
+--------------------------------------
+brew install kafka
+
+You can try
+brew services start zookeeper
+brew services start kafka
+

@@ -40,11 +40,16 @@ public class DatabaseAspect implements EventPublisher {
     //only after successfully executing
     @AfterReturning("execution(* com.learning.databaseevent.repository.OrderRepo.save(..))")
     public void printThisNow (JoinPoint joinPoint){
-        log.info("total number of parameters to this method : {}", joinPoint.getArgs().length);
-        log.info("parameter argument type : {}", joinPoint.getArgs()[0].getClass().getName());
+//        log.info("total number of parameters to this method : {}", joinPoint.getArgs().length);
+//        log.info("parameter argument type : {}", joinPoint.getArgs()[0].getClass().getName());
+
+        //emit metrics related data which gets persisted in the influxdb.
+        //data available in influxdb means grafana can use it for building metrics boards.
+
 
         OrderEntity orderEntity = (OrderEntity) joinPoint.getArgs()[0];
         Event<OrderEntity> orderSavedEvent = new Event<>(orderEntity);
         publishEvent (orderSavedEvent);
+        log.info("Database call was made");
     }
 }
