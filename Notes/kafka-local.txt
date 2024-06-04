@@ -34,3 +34,4 @@ You can try
 brew services start zookeeper
 brew services start kafka
 
+checkout https://github.com/a0x8o/kafka/blob/master/TROGDOR.md framework from apache kafka for kafka testing.

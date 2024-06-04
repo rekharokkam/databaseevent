@@ -56,6 +56,7 @@ dependencies {
 
     implementation 'io.confluent:kafka-serde-tools-package:7.3.5'
     implementation "org.apache.avro:avro:${avro_version}"
+    implementation 'org.apache.kafka:kafka-tools:3.7.0'
 
     implementation 'com.hazelcast:hazelcast:5.2.2'
     implementation "com.hazelcast:hazelcast-spring"

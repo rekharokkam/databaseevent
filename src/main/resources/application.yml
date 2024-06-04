@@ -42,6 +42,8 @@ spring:
           contentType: application/*+avro
           destination: customer-outbound-topic
           producer:
+            client.id: Junk123
+            compression.type: lz4
             useNativeDecoding: true
         outbound-out-0:
           binder: kafka
@@ -49,6 +51,8 @@ spring:
           destination: customer-outbound-topic
           producer:
             useNativeEncoding: true
+            client.id: Junk456
+            compression.type: lz4
 
       kafka:
         binder:
@@ -68,6 +72,8 @@ spring:
                 auto.register.schemas: false
                 use.latest.version: true
 #                use.schema.id: 1
+                client.id: Junk789
+                compression.type: lz4
 
         streams:
           binder:
@@ -96,7 +102,8 @@ spring:
                 contentType: application/*+avro
                 keySerde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 valueSerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-
+                client.id: Junk0ab
+                compression.type: lz4
 
 application:
   name: databaseevent
