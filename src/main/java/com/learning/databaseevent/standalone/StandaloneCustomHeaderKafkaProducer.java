@@ -6,6 +6,7 @@ import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -13,6 +14,7 @@ import org.slf4j.event.Level;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 @Slf4j
 public class StandaloneCustomHeaderKafkaProducer {
@@ -28,23 +30,7 @@ public class StandaloneCustomHeaderKafkaProducer {
         parentLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
         System.out.println("default logging level : " + parentLogger.isDebugEnabled());
 
-        Properties kafkaAvroProducerProperties = new Properties();
-
-        kafkaAvroProducerProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
-        kafkaAvroProducerProperties.setProperty (ProducerConfig.ACKS_CONFIG, "all");
-        kafkaAvroProducerProperties.setProperty (ProducerConfig.RETRIES_CONFIG, "10"); //need not be set
-        kafkaAvroProducerProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        kafkaAvroProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-        kafkaAvroProducerProperties.setProperty("auto.register.schemas", "false");
-
-        Map<String, String> customHeaders = new HashMap<>();
-        customHeaders.put("x-api-key", "123456");
-
-        Map<String, ?> originals = null;
-        CachedSchemaRegistryClient srClient =
-                new CachedSchemaRegistryClient("http://localhost:8081", 10,  originals, customHeaders);
-        KafkaProducer<String, Customer> customerV1KafkaProducer =
-                new KafkaProducer(kafkaAvroProducerProperties, new StringSerializer(), new KafkaAvroSerializer(srClient));
+        KafkaProducer<String, Customer> customerV1KafkaProducer = getStringCustomerKafkaProducer();
 
         Customer customerV2 = Customer.newBuilder()
                 .setFirstName("gulab2")
@@ -75,5 +61,31 @@ public class StandaloneCustomHeaderKafkaProducer {
 
         customerV1KafkaProducer.flush();
         customerV1KafkaProducer.close();
+    }
+
+    @NotNull
+    private static KafkaProducer<String, Customer> getStringCustomerKafkaProducer() {
+        Properties kafkaAvroProducerProperties = new Properties();
+
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        kafkaAvroProducerProperties.setProperty (ProducerConfig.ACKS_CONFIG, "all");
+        kafkaAvroProducerProperties.setProperty (ProducerConfig.RETRIES_CONFIG, "10"); //need not be set
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+        kafkaAvroProducerProperties.setProperty("auto.register.schemas", "false");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "lz4");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.CLIENT_ID_CONFIG, "databaseevent_application");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.TRANSACTIONAL_ID_CONFIG, UUID.randomUUID().toString());
+
+        Map<String, String> customHeaders = new HashMap<>();
+        customHeaders.put("x-api-key", "123456");
+
+        Map<String, ?> originals = null;
+        CachedSchemaRegistryClient srClient =
+                new CachedSchemaRegistryClient("http://localhost:8081", 10,  originals, customHeaders);
+        KafkaProducer<String, Customer> customerV1KafkaProducer =
+                new KafkaProducer(kafkaAvroProducerProperties, new StringSerializer(), new KafkaAvroSerializer(srClient));
+        return customerV1KafkaProducer;
     }
 }

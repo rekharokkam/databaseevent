@@ -5,9 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import com.learning.spring.kafka.avro.Customer;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Properties;
+import java.util.Random;
+import java.util.UUID;
 
 @Slf4j
 public class StandaloneBasicKafkaProducer {
@@ -23,17 +26,7 @@ public class StandaloneBasicKafkaProducer {
         parentLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
         System.out.println("default logging level : " + parentLogger.isDebugEnabled());
 
-        Properties kafkaAvroProducerProperties = new Properties();
-
-        kafkaAvroProducerProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
-        kafkaAvroProducerProperties.setProperty (ProducerConfig.ACKS_CONFIG, "all");
-        kafkaAvroProducerProperties.setProperty (ProducerConfig.RETRIES_CONFIG, "10"); //need not be set
-        kafkaAvroProducerProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        kafkaAvroProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-        kafkaAvroProducerProperties.setProperty("auto.register.schemas", "false");
-        kafkaAvroProducerProperties.setProperty("schema.registry.url", "http://localhost:8081");
-
-        KafkaProducer<String, Customer> customerV1KafkaProducer = new KafkaProducer<String, Customer>(kafkaAvroProducerProperties);
+        KafkaProducer<String, Customer> customerV1KafkaProducer = getStringCustomerKafkaProducer();
 
         Customer customerV2 = Customer.newBuilder()
                 .setFirstName("gulab1")
@@ -64,5 +57,25 @@ public class StandaloneBasicKafkaProducer {
 
         customerV1KafkaProducer.flush();
         customerV1KafkaProducer.close();
+    }
+
+    @NotNull
+    private static KafkaProducer<String, Customer> getStringCustomerKafkaProducer() {
+        Properties kafkaAvroProducerProperties = new Properties();
+
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        kafkaAvroProducerProperties.setProperty (ProducerConfig.ACKS_CONFIG, "all");
+        kafkaAvroProducerProperties.setProperty (ProducerConfig.RETRIES_CONFIG, "10"); //need not be set
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+        kafkaAvroProducerProperties.setProperty("auto.register.schemas", "false");
+        kafkaAvroProducerProperties.setProperty("schema.registry.url", "http://localhost:8081");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "lz4");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.CLIENT_ID_CONFIG, "databaseevent_application");
+        kafkaAvroProducerProperties.setProperty(ProducerConfig.TRANSACTIONAL_ID_CONFIG, UUID.randomUUID().toString());
+
+        KafkaProducer<String, Customer> customerV1KafkaProducer = new KafkaProducer<String, Customer>(kafkaAvroProducerProperties);
+        return customerV1KafkaProducer;
     }
 }
