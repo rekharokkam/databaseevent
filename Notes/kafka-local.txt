@@ -37,3 +37,6 @@ brew services start kafka
 checkout https://github.com/a0x8o/kafka/blob/master/TROGDOR.md framework from apache kafka for kafka testing.
 
 Kafka includes two important tools to help with this validation. The org.apache.kafka.tools package includes VerifiableProducer and VerifiableConsumer classes. These can run as command-line tools or be embedded in an automated testing framework.
+
+I pulled latest kafka image - docker pull apache/kafka:latest
+This is similar to - /Users/kiranrokkam/Documents/Rekha/software/kafka-3.8.0-src
